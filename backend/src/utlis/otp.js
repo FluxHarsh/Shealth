@@ -1,5 +1,5 @@
 const generateOTP = () => {
-  return "1234"; // fixed demo OTP
+  return "123456"; // fixed demo OTP
 };
 
 const sendOTP = async (phone) => {
