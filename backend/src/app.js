@@ -12,9 +12,16 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req,res)=>{
+    res.send("/ endpoint is running")
+})
+
 
 app.get('/health', (req, res) => {
-  res.json({ success: true, message: 'SHEALTH API is running', timestamp: new Date() });
+  res.json({ 
+    success: true, 
+    message: 'SHEALTH API is running'
+});
 });
 
 

@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 5000;
 //database connect hone ke baad express listens
 connectDB().then(() => {
     app.listen(PORT , () => {
-        console.log("Database connnected & backend server is running on port" + PORT + "\n")
+        console.log("Database connnected & backend server is running on port " + PORT + "\n")
+        console.log("express server running on http://localhost:"+PORT) 
     })
 })
