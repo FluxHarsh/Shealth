@@ -9,6 +9,13 @@ import SplashPage from './pages/SplashPage';
 import LoginPage  from './pages/LoginPage';
 
 
+import PatientHome    from './pages/PatientHome';
+import AssessmentPage from './pages/AssessmentPage';
+import ReportPage     from './pages/ReportPage';
+import VideoCallPage  from './pages/VideoCallPage';
+
+
+
 function Guard({ children, role: need }) {
   const { role } = useApp();
   if (!role) return <Navigate to="/login" replace />;
@@ -56,12 +63,21 @@ function Shell() {
         <Route path="/"      element={<SplashPage />} />
         <Route path="/login" element={<LoginPage />}  />
 
+
+        <Route path="/patient"
+          element={<Guard role="patient"><PatientHome /></Guard>} />
+        <Route path="/patient/assessment"
+          element={<Guard role="patient"><AssessmentPage /></Guard>} />
+        <Route path="/patient/report"
+          element={<Guard role="patient"><ReportPage /></Guard>} />
+        <Route path="/patient/video-call"
+          element={<Guard role="patient"><VideoCallPage /></Guard>} />
+        <Route path="/patient/diagnostics"
+          element={<Guard role="patient"><VideoCallPage startOnDiagnostics /></Guard>} />
+
+
       
-        <Route path="/patient"             element={<Guard role="patient"><ComingSoon label="Patient Home" /></Guard>} />
-        <Route path="/patient/assessment"  element={<Guard role="patient"><ComingSoon label="AI Assessment" /></Guard>} />
-        <Route path="/patient/report"      element={<Guard role="patient"><ComingSoon label="Health Report" /></Guard>} />
-        <Route path="/patient/video-call"  element={<Guard role="patient"><ComingSoon label="Video Call" /></Guard>} />
-        <Route path="/patient/diagnostics" element={<Guard role="patient"><ComingSoon label="Diagnostics" /></Guard>} />
+        
         <Route path="/patient/results"     element={<Guard role="patient"><ComingSoon label="Lab Results" /></Guard>} />
         <Route path="/patient/learn"       element={<Guard role="patient"><ComingSoon label="Learn" /></Guard>} />
         <Route path="/patient/community"   element={<Guard role="patient"><ComingSoon label="Community" /></Guard>} />

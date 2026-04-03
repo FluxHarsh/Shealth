@@ -11,6 +11,7 @@ const ROLES = [
     icon: '🩺',
     bg: '#EDE8F8', border: 'rgba(201,184,232,0.7)',
   },
+  
   {
     id: 'whf', label: 'Facilitator',
     desc: 'Manage patient care and bridge the gap',
