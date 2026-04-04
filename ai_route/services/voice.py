@@ -5,13 +5,17 @@ Voice Service — NO ffmpeg needed
                   Simple, lightweight, supports Hindi + English
 """
 
-import google.generativeai as genai
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage
 from gtts import gTTS
 from config import GEMINI_API_KEY
 import io, base64
 
-genai.configure(api_key=GEMINI_API_KEY)
-audio_model = genai.GenerativeModel("gemini-1.5-flash")
+audio_model = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash",
+    google_api_key=GEMINI_API_KEY,
+    temperature=0,
+)
 
 
 
@@ -37,15 +41,21 @@ async def transcribe_audio(base64_audio: str, mime_type: str, language: str = "h
     try:
         prompt = TRANSCRIBE_PROMPT_HI if language == "hi" else TRANSCRIBE_PROMPT
 
-        audio_part = {
-            "inline_data": {
-                "mime_type": mime_type,
-                "data": base64_audio,
-            }
-        }
+        # Create message with audio content for Langchain
+        message = HumanMessage(
+            content=[
+                {"type": "text", "text": prompt},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:{mime_type};base64,{base64_audio}"
+                    }
+                }
+            ]
+        )
 
-        response = audio_model.generate_content([prompt, audio_part])
-        transcribed_text = response.text.strip()
+        response = audio_model.invoke([message])
+        transcribed_text = response.content.strip()
 
         return {
             "success": True,
