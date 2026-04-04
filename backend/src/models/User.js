@@ -62,12 +62,13 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 
 // Runs automatically whenever we call user.save()
 // Only rehashes if the password field was actually changed
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('passwordHash')) return next();
-  this.passwordHash = await bcrypt.hash(this.passwordHash, 12); 
-  next();
-});
 
-
+// commenting this as during demo phase no one is using password to login we will demo via patient and not as doc or whf for now
+// userSchema.pre('save', async function (next) {
+//   if (!this.isModified('passwordHash') || !this.passwordHash) return next();
+//   const salt = await bcrypt.genSalt(12);
+//   this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+//   next();
+// });
 
 module.exports = mongoose.model('User', userSchema);
