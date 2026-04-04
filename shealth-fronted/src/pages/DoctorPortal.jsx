@@ -50,7 +50,8 @@ export default function DoctorPortal() {
   const [activeTab, setActiveTab] = useState('queue');
   const [online,    setOnline]    = useState(true);
 
-  const { name, specialty, queue } = MOCK.doctor;
+  const { specialty, queue } = MOCK.doctor;
+  const name = user?.name || MOCK.doctor.name;
 
   return (
     <div style={{
