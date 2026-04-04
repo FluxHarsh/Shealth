@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
-const AI_BASE  = import.meta.env.VITE_AI_URL  || 'http://localhost:8000';
+const AI_BASE  = import.meta.env.AI_SERVICE_URL  || 'http://localhost:8000';
 
 const OPT_BG     = ['#F7D5E0','#D4EEF8','#D4F0E8','#FFF0D4','#EDE8F8','#FFE8D4'];
 const OPT_ACCENT = ['#C8426D','#2196F3','#4CAF85','#F0A000','#8B72C8','#E07B00'];
