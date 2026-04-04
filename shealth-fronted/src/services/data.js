@@ -2,7 +2,7 @@
 
 
 export const AI_ENDPOINT =
-  import.meta.env.VITE_AI_URL || 'https://YOUR_FRIENDS_API/assess';
+  import.meta.env.VITE_AI_URL || 'https://tic-invictus-1.onrender.com/assessment/start';
 
 export const QUESTIONS = [
   { id: 1, q: 'What is your main concern today?',

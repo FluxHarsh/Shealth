@@ -4,7 +4,7 @@ const { checkVitalsAlerts, alertsToUrgency } = require('../utils/vitalsAlert');
 
 const callAIService = async (endpoint, payload) => {
   try {
-    const response = await fetch(`${process.env.AI_SERVICE_URL}${endpoint}`, {
+    const response = await fetch(`${process.env.VITE_AI_URL}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const startAssessment = async (req, res, next) => {
     }
 
 
-    const aiResponse = await callAIService('/start', { patientId });
+    const aiResponse = await callAIService('//assessment/start', { patientId });
     const firstQuestion = aiResponse?.question || FALLBACK_QUESTIONS[0];
 
 
@@ -116,7 +116,7 @@ const submitAnswer = async (req, res, next) => {
     const questionNumber = unansweredIndex + 1;
 
 
-    const aiResponse = await callAIService('/next-question', {
+    const aiResponse = await callAIService('/assessment/next-question', {
       assessmentId: assessment._id,
       qa: assessment.qa,
       questionNumber,
@@ -171,7 +171,7 @@ const generateReport = async (req, res, next) => {
     }
 
 
-    const aiReport = await callAIService('/generate-report', {
+    const aiReport = await callAIService('/report/generate', {
       assessmentId: assessment._id,
       qa: assessment.qa,
       vitals: assessment.vitalsSnapshot,
