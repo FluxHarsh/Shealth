@@ -32,9 +32,9 @@ app.use('/api/users',       require('./routes/user.routes'));
 app.use('/api/assessment',  require('./routes/assessment.routes'));
 app.use('/api/vitals',      require('./routes/vitals.routes'));
 app.use('/api/ai',          require('./routes/ai.routes'));
-// app.use('/api/consult',     require('./routes/consult.routes'));
-// app.use('/api/diagnostics', require('./routes/diagnostics.routes'));
-// app.use('/api/slots',       require('./routes/slot.routes'));
+app.use('/api/consult',     require('./routes/consult.routes'));
+app.use('/api/diagnostics', require('./routes/diagnostics.routes'));
+app.use('/api/slots',       require('./routes/slot.routes'));
 app.use('/api/whf',         require('./routes/whf.routes'));
 
 
