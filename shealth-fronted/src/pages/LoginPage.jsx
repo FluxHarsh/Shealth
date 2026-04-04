@@ -11,7 +11,7 @@ const ROLES = [
     icon: '🩺',
     bg: '#EDE8F8', border: 'rgba(201,184,232,0.7)',
   },
-  
+
   {
     id: 'whf', label: 'Facilitator',
     desc: 'Manage patient care and bridge the gap',
@@ -65,7 +65,7 @@ export default function LoginPage() {
     try {
       await sendOTP(phone, selectedRole, selectedRole);
       setStep('otp');
-      addNotification('OTP sent! Use 1234 for demo 🌸');
+      addNotification('OTP sent! Use 123456 for demo 🌸');
     } catch (err) {
 
       console.warn('Backend not reachable — demo mode:', err.message);

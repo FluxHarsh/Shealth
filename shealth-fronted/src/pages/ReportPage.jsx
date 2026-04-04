@@ -2,11 +2,40 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
+// Normalize AI route report format → ReportPage display format
+// Handles both { symptomsSummary, urgencyLevel, possibleConcerns } (AI route)
+// and { symptoms[], severity, keyObservations[] } (legacy/fallback)
+function normalizeReport(raw) {
+  if (!raw) return null;
+  if (Array.isArray(raw.symptoms) && raw.symptoms.length) return raw;
+
+  const urgency = raw.urgencyLevel || 'routine';
+  const severityMap = { urgent: 'Severe', priority: 'Moderate', routine: 'Mild' };
+  const rawSev = raw.severity || severityMap[urgency] || 'Moderate';
+  const severity = rawSev.charAt(0).toUpperCase() + rawSev.slice(1).toLowerCase();
+
+  return {
+    symptoms:         raw.possibleConcerns?.length ? raw.possibleConcerns
+                      : raw.symptomsSummary ? [raw.symptomsSummary] : ['Symptoms recorded'],
+    duration:         raw.duration || 'As reported',
+    severity,
+    keyObservations:  raw.keyObservations?.length ? raw.keyObservations
+                      : raw.possibleConcerns?.length ? raw.possibleConcerns
+                      : [raw.symptomsSummary || 'Please consult your doctor.'],
+    riskFlags:        urgency === 'urgent' ? 'Urgent attention recommended based on reported symptoms.' : null,
+    riskLevel:        urgency === 'urgent' ? 'high' : urgency === 'priority' ? 'medium' : 'low',
+    recommendedTests: raw.recommendedTests || [],
+    summary:          raw.symptomsSummary || '',
+  };
+}
 
 const SEVERITY = {
   Mild:     { color:'#4CAF85', bg:'#E8F8F2', icon:'🟢' },
   Moderate: { color:'#F0A000', bg:'#FFF3E0', icon:'🟡' },
   Severe:   { color:'#D63030', bg:'#FFE8E8', icon:'🔴' },
+  mild:     { color:'#4CAF85', bg:'#E8F8F2', icon:'🟢' },
+  moderate: { color:'#F0A000', bg:'#FFF3E0', icon:'🟡' },
+  severe:   { color:'#D63030', bg:'#FFE8E8', icon:'🔴' },
 };
 
 
@@ -18,7 +47,7 @@ export default function ReportPage() {
   const navigate     = useNavigate();
 
   
-  const report = aiReport || {
+  const rawReport = aiReport || {
     symptoms:        ['Fatigue', 'Headache', 'Nausea', 'Joint Pain'],
     duration:        'Last 3 Days',
     severity:        'Moderate',
@@ -34,6 +63,13 @@ export default function ReportPage() {
     recommendedTests: [],
     summary:          'Patient presents with moderate symptoms for 3 days.',
   };
+
+  const report = normalizeReport(rawReport) || rawReport;
+
+  // Ensure arrays are always arrays (guard against undefined crashes)
+  const symptoms        = Array.isArray(report.symptoms)        ? report.symptoms        : ['Symptoms recorded'];
+  const keyObservations = Array.isArray(report.keyObservations) ? report.keyObservations : ['Please consult a doctor.'];
+  const recommendedTests= Array.isArray(report.recommendedTests)? report.recommendedTests: [];
 
   const sev = SEVERITY[report.severity] || SEVERITY.Moderate;
 
@@ -120,7 +156,7 @@ export default function ReportPage() {
               </h3>
               
               <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                {report.symptoms.map((s, i) => (
+                {symptoms.map((s, i) => (
                   <span key={s} style={{
                     background: TAG_BG[i % 6],
                     color:      TAG_ACCENT[i % 6],
@@ -181,7 +217,7 @@ export default function ReportPage() {
               Key Observations
             </h3>
             <ul style={{ margin:0, paddingLeft:17 }}>
-              {report.keyObservations.map((obs, i) => (
+              {keyObservations.map((obs, i) => (
                 <li key={i} style={{
                   color:'#2D5A4E', fontSize:'0.82rem', marginBottom:5, lineHeight:1.5,
                 }}>
@@ -320,7 +356,7 @@ export default function ReportPage() {
           </p>
         </div>
 
-        {report.recommendedTests?.length > 0 && (
+        {recommendedTests.length > 0 && (
           <button
             onClick={() => navigate('/patient/diagnostics')}
             style={{
