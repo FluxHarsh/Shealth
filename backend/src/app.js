@@ -3,9 +3,11 @@ const cors = require('cors');
 
 const app = express();
 //temoprary
-app.use(cors({
-  origin: 'FRONTEND_URL',
-}));
+// app.use(cors({
+//   origin: 'FRONTEND_URL',
+// }));
+
+app.use(cors());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
