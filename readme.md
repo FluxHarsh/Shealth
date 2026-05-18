@@ -1,5 +1,3 @@
-Technocrats Innovation Challenge - 2k26
-
 # SHEALTH — Rural Women's Health Platform
 
 > AI-powered healthcare for rural Indian women, connecting patients with community health workers and doctors through an adaptive assessment, video consultation, and real-time vitals monitoring system.
